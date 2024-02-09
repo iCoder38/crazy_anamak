@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "769895385898",
+    "project_id": "anamak-8eaeb",
+    "storage_bucket": "anamak-8eaeb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769895385898:android:24fd2381e0ca3e8cf8ac53",
+        "android_client_info": {
+          "package_name": "com.crazy_anamak.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "769895385898-qtji2pua5d58787ke2qvo3udt0fc9h5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzTiVeq1sor-lV5P1yWnENMB98x4eUY8M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "769895385898-qtji2pua5d58787ke2qvo3udt0fc9h5k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "769895385898-rlsh210sj4fd968q9jumekv3hk58mvkh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.crazy-anamak.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
