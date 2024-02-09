@@ -208,11 +208,13 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
             'total_likes': '0',
             'total_comments': '0',
             'total_shares': '0',
-            'total_views':'0',
+            'total_views': '0',
             //
             'type': 'story',
             'story_type': 'all',
             'active': 'yes',
+            //
+            'liked_users': [],
           },
         )
         .then(

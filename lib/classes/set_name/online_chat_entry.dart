@@ -327,7 +327,7 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
   }
 
 /**********************************************************************/
-/**********************************************************************/
+/// *******************************************************************
 
   // CHECK PROFILE DATA AFTER CLICK ON SET
   funcSetProfileForChat() {

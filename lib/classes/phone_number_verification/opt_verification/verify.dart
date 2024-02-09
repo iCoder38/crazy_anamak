@@ -8,8 +8,7 @@ import 'package:pinput/pinput.dart';
 
 class MyVerify extends StatefulWidget {
   const MyVerify(
-      {Key? key, required this.getVerificationId, required this.resendToken})
-      : super(key: key);
+      {super.key, required this.getVerificationId, required this.resendToken});
 
   final String getVerificationId;
   final int? resendToken;
@@ -44,7 +43,7 @@ class _MyVerifyState extends State<MyVerify> {
 
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
-        color: Color.fromRGBO(234, 239, 243, 1),
+        color: const Color.fromRGBO(234, 239, 243, 1),
       ),
     );
 
@@ -181,7 +180,7 @@ class _MyVerifyState extends State<MyVerify> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => HomeScreen(),
+        builder: (context) => const HomeScreen(),
       ),
     );
   }

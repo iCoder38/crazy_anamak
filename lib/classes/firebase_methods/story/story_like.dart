@@ -5,10 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../headers/utils/utils.dart';
-// import '../../all_stories/story_details/story_details.dart';
-import 'story_like.dart';
 
-checkUserAllActivity(storyDocumentId) {
+checkUserAllActivityForLikes(storyDocumentId) async {
   //
   if (kDebugMode) {
     print('========= ID ========');
@@ -16,10 +14,10 @@ checkUserAllActivity(storyDocumentId) {
     print('=====================');
   }
   //
-  FirebaseFirestore.instance
+  await FirebaseFirestore.instance
       .collection(
-        // '${strFirebaseMode}story_data/story_view/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
-        '${strFirebaseMode}story_data/story_view/$storyDocumentId',
+        // '${strFirebaseMode}story_data/story_like/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
+        '${strFirebaseMode}story_data/story_like/$storyDocumentId',
       )
       .get()
       .then((value) {
@@ -29,10 +27,10 @@ checkUserAllActivity(storyDocumentId) {
 
     if (value.docs.isEmpty) {
       if (kDebugMode) {
-        print('===== NO STORY DATA IN DB ====');
+        print('===== NO, YOU DID NOT LIKE THIS STORY ====');
       }
       //
-      addStoryDataAndOneView(storyDocumentId);
+      // addStoryDataAndOneLike(storyDocumentId);
       //
     } else {
       for (var element in value.docs) {
@@ -41,24 +39,21 @@ checkUserAllActivity(storyDocumentId) {
           print(element.id);
           print(element.id.runtimeType);
           print('==============================================');
-          print('====== YOU ALREADY VIEWED THIS STORY =========');
+          print('====== YES, YOU ALREADY LIKE THIS STORY ======');
           print('==============================================');
         }
         //
-        // CHECK LIKE STATUS
-        // checkUserAllActivityForLikes(storyDocumentId);
-        //  checkUserAllActivityForLikes2(storyDocumentId);
       }
     }
   });
 }
 
 //
-addStoryDataAndOneView(storyDocumentId) {
+addStoryDataAndOneLike(storyDocumentId) {
   //
   CollectionReference users = FirebaseFirestore.instance.collection(
-    // '${strFirebaseMode}story_data/story_view/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
-    '${strFirebaseMode}story_data/story_view/$storyDocumentId',
+    // '${strFirebaseMode}story_data/story_like/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
+    '${strFirebaseMode}story_data/story_like/$storyDocumentId',
   );
   users
       .add(
@@ -71,7 +66,7 @@ addStoryDataAndOneView(storyDocumentId) {
       .then(
         (value) =>
             //
-            storyDetailsToEdit(storyDocumentId),
+            storyDetailsToLikeEdit(storyDocumentId),
         //
       )
       .catchError(
@@ -80,7 +75,7 @@ addStoryDataAndOneView(storyDocumentId) {
 }
 
 // get story details
-storyDetailsToEdit(storyDocumentId) {
+storyDetailsToLikeEdit(storyDocumentId) {
   //
   FirebaseFirestore.instance
       .collection(
@@ -100,18 +95,23 @@ storyDetailsToEdit(storyDocumentId) {
       //
     } else {
       for (var element in value.docs) {
+        /*if (kDebugMode) {
+            print('======> YES STORY FOUND ======');
+            print(element.id);
+            print(element.data());
+          }*/
         //
         var strTotalLikeIs = 0;
         strTotalLikeIs =
-            int.parse(element.data()['total_views'].toString()) + 1;
-        // print(strTotalLikeIs);
+            int.parse(element.data()['total_likes'].toString()) + 1;
+        print('total likes ===> +$strTotalLikeIs');
         //
         FirebaseFirestore.instance
             .collection("${strFirebaseMode}stories")
             .doc(storyDocumentId)
             .set(
           {
-            'total_views': strTotalLikeIs.toString(),
+            'total_likes': strTotalLikeIs.toString(),
           },
           SetOptions(merge: true),
         ).then(
@@ -119,12 +119,9 @@ storyDetailsToEdit(storyDocumentId) {
             // success
             if (kDebugMode) {
               print('==============================================');
-              print('====== SUCCESSFULLY VIEWED ===========');
+              print('====== SUCCESSFULLY LIKED ===========');
               print('==============================================');
             }
-            //
-            // CHECK LIKE STATUS
-            // checkUserAllActivityForLikes(storyDocumentId);
           },
         );
       }

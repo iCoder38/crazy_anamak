@@ -40,7 +40,7 @@ class _PrivateChatScreenTwoState extends State<PrivateChatScreenTwo> {
   //
   TextEditingController contTextSendMessage = TextEditingController();
   //
-  int _currentItem = 0;
+  final int _currentItem = 0;
   var strScrollOnlyOneTime = '1';
   //
   var roomId;
@@ -84,7 +84,7 @@ class _PrivateChatScreenTwoState extends State<PrivateChatScreenTwo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarScreen(
+      appBar: const AppBarScreen(
         str_app_bar_title: 'Private Chat',
         str_status: '1',
       ),
@@ -155,13 +155,6 @@ class _PrivateChatScreenTwoState extends State<PrivateChatScreenTwo> {
                                   margin: const EdgeInsets.all(10.0),
                                   width: 120,
                                   height: 40,
-                                  child: Center(
-                                    child: textWithSemiBoldStyle(
-                                      'New message',
-                                      14.0,
-                                      Colors.black,
-                                    ),
-                                  ),
                                   decoration: BoxDecoration(
                                     color: const Color.fromARGB(
                                       255,
@@ -183,6 +176,13 @@ class _PrivateChatScreenTwoState extends State<PrivateChatScreenTwo> {
                                         ), // changes position of shadow
                                       ),
                                     ],
+                                  ),
+                                  child: Center(
+                                    child: textWithSemiBoldStyle(
+                                      'New message',
+                                      14.0,
+                                      Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),

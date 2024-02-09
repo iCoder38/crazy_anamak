@@ -112,13 +112,6 @@ class _PublicChatRoomChatsState extends State<PublicChatRoomChats> {
                             margin: const EdgeInsets.all(10.0),
                             width: 120,
                             height: 40,
-                            child: Center(
-                              child: textWithSemiBoldStyle(
-                                'New message',
-                                14.0,
-                                Colors.black,
-                              ),
-                            ),
                             decoration: BoxDecoration(
                               color: const Color.fromARGB(
                                 255,
@@ -140,6 +133,13 @@ class _PublicChatRoomChatsState extends State<PublicChatRoomChats> {
                                   ), // changes position of shadow
                                 ),
                               ],
+                            ),
+                            child: Center(
+                              child: textWithSemiBoldStyle(
+                                'New message',
+                                14.0,
+                                Colors.black,
+                              ),
                             ),
                           ),
                         ),

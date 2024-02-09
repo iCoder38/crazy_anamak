@@ -1,10 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'classes/phone_number_verification/phone_number.dart';
 import 'classes/welcome_page_view/welcome_page_view.dart';
 import 'firebase_options.dart';

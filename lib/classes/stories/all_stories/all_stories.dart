@@ -98,8 +98,11 @@ class _AllStoriesScreenState extends State<AllStoriesScreen> {
                 ),
               ),
               //
-              // 
-               TotalViewsOnStoryScreen(strViewCount: communityData['total_views']),
+              //
+              TotalViewsOnStoryScreen(
+                strViewCount: communityData['total_views'],
+                strLikeCount: communityData['total_likes'],
+              ),
               //
               const Divider(
                 height: 2,

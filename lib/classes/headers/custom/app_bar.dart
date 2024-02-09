@@ -11,11 +11,10 @@ class AppBarScreen extends StatefulWidget implements PreferredSizeWidget {
   final Size preferredSize;
 
   const AppBarScreen({
-    Key? key,
+    super.key,
     required this.str_app_bar_title,
     required this.str_status,
-  })  : preferredSize = const Size.fromHeight(56.0),
-        super(key: key);
+  })  : preferredSize = const Size.fromHeight(56.0);
 
   @override
   State<AppBarScreen> createState() => _AppBarScreenState();
