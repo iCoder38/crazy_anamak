@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crazy_anamak/classes/comment_bottom_bar/comment_bottom_bar.dart';
 import 'package:crazy_anamak/classes/stories/add_Story/add_story.dart';
 import 'package:crazy_anamak/classes/stories/all_stories/widgets/description.dart';
 import 'package:crazy_anamak/classes/stories/all_stories/widgets/story_title.dart';
@@ -6,6 +7,7 @@ import 'package:crazy_anamak/classes/stories/all_stories/widgets/total_view.dart
 import 'package:crazy_anamak/classes/stories/story_details/story_details.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../headers/utils/utils.dart';
 
@@ -76,6 +78,7 @@ class _AllStoriesScreenState extends State<AllStoriesScreen> {
             GestureDetector(
           onTap: () {
             //
+
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -84,6 +87,13 @@ class _AllStoriesScreenState extends State<AllStoriesScreen> {
                 ),
               ),
             );
+            /*Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    BottomBarScreen(getStoryFullData: communityData),
+              ),
+            );*/
           },
           child: Column(
             children: [

@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crazy_anamak/classes/stories/story_comment/story_comment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../firebase_methods/story/story_details.dart';
 import '../../firebase_methods/story/story_like.dart';
@@ -82,6 +84,7 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                 IconButton(
                   onPressed: () {
                     //
+                    HapticFeedback.lightImpact();
                     setState(() {
                       strLikeStatus = '2';
                     });
@@ -131,6 +134,104 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
         ),
       ),
     );
+    /*Scaffold(
+      appBar: AppBar(
+        title: textWithSemiBoldStyle(
+          'Stories',
+          16.0,
+          Colors.black,
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.chevron_left,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        actions: [
+          Column(
+            children: [
+              if (strLikeStatus == '0') ...[
+                //
+                IconButton(
+                    onPressed: () {
+                      //
+                    },
+                    icon: const SizedBox(
+                      height: 0,
+                    )),
+              ] else if (strLikeStatus == '1') ...[
+                //
+                IconButton(
+                  onPressed: () {
+                    //
+                    setState(() {
+                      strLikeStatus = '2';
+                    });
+                    //
+                    getDetailsOfThatStory(strSaveStoryDocumentId, 'add');
+                  },
+                  icon: const Icon(
+                    Icons.favorite_border,
+                    color: Colors.pinkAccent,
+                  ),
+                ),
+              ] else ...[
+                IconButton(
+                  onPressed: () {
+                    //
+                    setState(() {
+                      strLikeStatus = '1';
+                    });
+                    //
+                    getDetailsOfThatStory(strSaveStoryDocumentId, 'minus');
+                  },
+                  icon: const Icon(
+                    Icons.favorite,
+                    color: Colors.pinkAccent,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  StoryCommentScreen(storyFullDetails: widget.getAllData),
+            ),
+          );
+        },
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.black,
+        // shape: customizations[index].$3,
+        child: const Icon(Icons.chat_bubble),
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            ListTile(
+              title: StoryTitleScreen(
+                getStoryTitle: widget.getAllData['title'],
+              ),
+              subtitle: StoryDescriptionScreen(
+                //
+                getDescription: widget.getAllData['description'],
+                strForDetails: 'yes',
+              ),
+            )
+          ],
+        ),
+      ),
+    );*/
   }
 
 // get story details
@@ -314,6 +415,29 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
           print('========== SUCCESSFULLY $status ===============');
           print('==============================================');
         }
+        (status == 'ADD')
+            ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.pinkAccent, //green[200],
+                content: textWithRegularStyle(
+                  '!!! Successfully Liked !!!',
+                  14.0,
+                  Colors.white,
+                  'left',
+                ),
+              ))
+            : const SizedBox(
+                height: 0,
+              ); /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red[200],
+                content: textWithRegularStyle(
+                  'Success!!!',
+                  14.0,
+                  Colors.black,
+                  'left',
+                ),
+              ));*/
+        //
+
         //
         // CHECK LIKE STATUS
         // checkUserAllActivityForLikes(storyDocumentId);
