@@ -215,6 +215,8 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
             'active': 'yes',
             //
             'liked_users': [],
+            //
+            'category': '',
           },
         )
         .then(

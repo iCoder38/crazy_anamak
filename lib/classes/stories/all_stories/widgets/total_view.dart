@@ -27,14 +27,17 @@ class _TotalViewsOnStoryScreenState extends State<TotalViewsOnStoryScreen> {
           },
           icon: const Icon(
             Icons.remove_red_eye,
+            color: Colors.orangeAccent,
             size: 18.0,
           ),
         ),
-        textWithSemiBoldStyle(
+        textWithRegularStyle(
           //
           widget.strViewCount.toString(),
-          16.0,
-          const Color.fromARGB(255, 176, 3, 3),
+          14.0,
+          // const Color.fromARGB(255, 176, 3, 3),
+          Colors.black,
+          'left',
         ),
         Column(
           children: [

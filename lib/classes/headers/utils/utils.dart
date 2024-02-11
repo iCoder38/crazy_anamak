@@ -34,6 +34,7 @@ var databaseTableName = 'anamak_category_list_db_2';
 /* ================== FIREBASE COLLECTIONS NAME =================== */
 var collection_community = 'communities';
 var collection_all_stories = 'stories';
+var collection_room = 'rooms';
 /* ================================================================ */
 
 // text with regular

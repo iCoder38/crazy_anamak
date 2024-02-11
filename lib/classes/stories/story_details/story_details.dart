@@ -85,6 +85,17 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                   onPressed: () {
                     //
                     HapticFeedback.lightImpact();
+                    //
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: Colors.pinkAccent, //green[200],
+                      content: textWithRegularStyle(
+                        '!!! Successfully Liked !!!',
+                        14.0,
+                        Colors.white,
+                        'left',
+                      ),
+                    ));
+                    //
                     setState(() {
                       strLikeStatus = '2';
                     });
@@ -415,7 +426,7 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
           print('========== SUCCESSFULLY $status ===============');
           print('==============================================');
         }
-        (status == 'ADD')
+        /*(status == 'ADD')
             ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 backgroundColor: Colors.pinkAccent, //green[200],
                 content: textWithRegularStyle(
@@ -427,7 +438,7 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
               ))
             : const SizedBox(
                 height: 0,
-              ); /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              ); ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 backgroundColor: Colors.red[200],
                 content: textWithRegularStyle(
                   'Success!!!',

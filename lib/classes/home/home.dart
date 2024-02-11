@@ -1,4 +1,6 @@
 import 'package:crazy_anamak/classes/headers/utils/utils.dart';
+import 'package:crazy_anamak/classes/rooms/all_rooms/all_rooms.dart';
+import 'package:crazy_anamak/classes/rooms/create_room/create_room.dart';
 import 'package:crazy_anamak/classes/set_name/online_chat_entry.dart';
 import 'package:crazy_anamak/classes/stories/all_stories/all_stories.dart';
 import 'package:flutter/foundation.dart';
@@ -250,8 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const AllCommunitiesScreen(),
+                                builder: (context) => const AllRoomsScreen(),
                               ),
                             );
                           },
@@ -406,7 +407,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 40,
                             child: Align(
                               child: text_with_regular_style(
-                                'Communities',
+                                'Rooms',
                               ),
                             ),
                           ),
