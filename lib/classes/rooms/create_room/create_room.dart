@@ -398,6 +398,9 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
             'total_shares': '0',
             'total_views': '0',
             //
+            // member
+            'member_count': '0',
+            //
             // password
             'room_password': contRoomPrivatePassword.text.toString(),
             //
@@ -418,7 +421,6 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
         .then(
           (value) =>
               //
-              //
               FirebaseFirestore.instance
                   .collection("$strFirebaseMode$collection_room")
                   .doc(value.id)
@@ -436,7 +438,6 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                 print('==========================');
               }
               //
-
               setState(() {
                 strLoader = '0';
                 contRoomTitle.text = '';
@@ -447,7 +448,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 backgroundColor: Colors.green[200],
                 content: textWithRegularStyle(
-                  'Success!!!',
+                  '!!! Successfully !!!',
                   14.0,
                   Colors.black,
                   'left',

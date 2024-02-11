@@ -35,6 +35,7 @@ var databaseTableName = 'anamak_category_list_db_2';
 var collection_community = 'communities';
 var collection_all_stories = 'stories';
 var collection_room = 'rooms';
+var collection_room_premission = 'room_permission';
 /* ================================================================ */
 
 // text with regular
