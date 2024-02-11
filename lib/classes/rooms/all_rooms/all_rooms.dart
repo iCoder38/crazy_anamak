@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crazy_anamak/classes/rooms/create_room/create_room.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +7,8 @@ import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/foundation.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:shimmer/shimmer.dart';
 // import 'package:flutter/widgets.dart';
 
 import '../../headers/utils/utils.dart';
@@ -21,6 +25,13 @@ class AllRoomsScreen extends StatefulWidget {
 
 class _AllRoomsScreenState extends State<AllRoomsScreen> {
   //
+  var strPasswordIs = '';
+  final TextEditingController textFieldController = TextEditingController();
+  //
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +99,8 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
                       .collection(
                         "$strFirebaseMode$collection_room_premission",
                       )
+                      .where('room_document_id',
+                          isEqualTo: communityData['documentId'])
                       .where('id',
                           isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                       //
@@ -115,26 +128,27 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
                               subtitle: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  if (communityData['member_count'] == '0') ...[
+                                  if (communityData['total_members'] ==
+                                      '0') ...[
                                     //
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: textWithRegularStyle(
                                         //
-                                        '${communityData['member_count']} participant',
+                                        '${communityData['total_members']} participant',
                                         12.0,
                                         Colors.black,
                                         'left',
                                       ),
                                     ),
-                                  ] else if (communityData['member_count'] ==
+                                  ] else if (communityData['total_members'] ==
                                       '1') ...[
                                     //
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: textWithRegularStyle(
                                         //
-                                        '${communityData['member_count']} participant',
+                                        '${communityData['total_members']} participant',
                                         12.0,
                                         Colors.black,
                                         'left',
@@ -146,7 +160,7 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
                                       alignment: Alignment.centerLeft,
                                       child: textWithRegularStyle(
                                         //
-                                        '${communityData['member_count']} participants',
+                                        '${communityData['total_members']} participants',
                                         12.0,
                                         Colors.black,
                                         'left',
@@ -155,6 +169,14 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
                                   ],
                                 ],
                               ),
+                              onTap: () {
+                                //
+                                displayTextInputDialog(
+                                  context,
+                                  communityData['title'].toString(),
+                                  communityData['documentId'].toString(),
+                                );
+                              },
                             )
                           : ListTile(
                               title: textWithSemiBoldStyle(
@@ -171,26 +193,27 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
                               subtitle: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  if (communityData['member_count'] == '0') ...[
+                                  if (communityData['total_members'] ==
+                                      '0') ...[
                                     //
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: textWithRegularStyle(
                                         //
-                                        '${communityData['member_count']} participant',
+                                        '${communityData['total_members']} participant',
                                         12.0,
                                         Colors.black,
                                         'left',
                                       ),
                                     ),
-                                  ] else if (communityData['member_count'] ==
+                                  ] else if (communityData['total_members'] ==
                                       '1') ...[
                                     //
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: textWithRegularStyle(
                                         //
-                                        '${communityData['member_count']} participant',
+                                        '${communityData['total_members']} participant',
                                         12.0,
                                         Colors.black,
                                         'left',
@@ -202,7 +225,7 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
                                       alignment: Alignment.centerLeft,
                                       child: textWithRegularStyle(
                                         //
-                                        '${communityData['member_count']} participants',
+                                        '${communityData['total_members']} participants',
                                         12.0,
                                         Colors.black,
                                         'left',
@@ -217,14 +240,30 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
                         print(snapshot.error);
                       }
                     }
-                    return const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey,
+                        highlightColor: Colors.transparent,
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                height: 20,
+                                width: 120.0,
+                                color: Colors.amber,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      /*Center(
                         child: CircularProgressIndicator(
                           color: Colors.black,
                           strokeWidth: 0.8,
                         ),
-                      ),
+                      ),*/
                     );
                   }),
             ],
@@ -284,25 +323,25 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
               subtitle: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  if (communityData['member_count'] == '0') ...[
+                  if (communityData['total_members'] == '0') ...[
                     //
                     Align(
                       alignment: Alignment.centerLeft,
                       child: textWithRegularStyle(
                         //
-                        '${communityData['member_count']} participant',
+                        '${communityData['total_members']} participant',
                         12.0,
                         Colors.black,
                         'left',
                       ),
                     ),
-                  ] else if (communityData['member_count'] == '1') ...[
+                  ] else if (communityData['total_members'] == '1') ...[
                     //
                     Align(
                       alignment: Alignment.centerLeft,
                       child: textWithRegularStyle(
                         //
-                        '${communityData['member_count']} participant',
+                        '${communityData['total_members']} participant',
                         12.0,
                         Colors.black,
                         'left',
@@ -314,7 +353,7 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
                       alignment: Alignment.centerLeft,
                       child: textWithRegularStyle(
                         //
-                        '${communityData['member_count']} participants',
+                        '${communityData['total_members']} participants',
                         12.0,
                         Colors.black,
                         'left',
@@ -351,25 +390,25 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
       subtitle: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if (communityData['member_count'] == '0') ...[
+          if (communityData['total_members'] == '0') ...[
             //
             Align(
               alignment: Alignment.centerLeft,
               child: textWithRegularStyle(
                 //
-                '${communityData['member_count']} participant',
+                '${communityData['total_members']} participant',
                 12.0,
                 Colors.black,
                 'left',
               ),
             ),
-          ] else if (communityData['member_count'] == '1') ...[
+          ] else if (communityData['total_members'] == '1') ...[
             //
             Align(
               alignment: Alignment.centerLeft,
               child: textWithRegularStyle(
                 //
-                '${communityData['member_count']} participant',
+                '${communityData['total_members']} participant',
                 12.0,
                 Colors.black,
                 'left',
@@ -381,7 +420,7 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
               alignment: Alignment.centerLeft,
               child: textWithRegularStyle(
                 //
-                '${communityData['member_count']} participants',
+                '${communityData['total_members']} participants',
                 12.0,
                 Colors.black,
                 'left',
@@ -390,6 +429,171 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
           ],
         ],
       ),
+    );
+  }
+
+  Future<void> displayTextInputDialog(
+    BuildContext context,
+    strGroupName,
+    getRoomDocumentId,
+  ) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Column(
+              children: [
+                textWithSemiBoldStyle(
+                    'Please enter password \n', 18.0, Colors.black),
+                textWithRegularStyle(
+                  //
+                  strGroupName,
+                  14.0,
+                  Colors.black,
+                  'left',
+                ),
+              ],
+            ),
+            content: TextField(
+              onChanged: (value) {
+                setState(() {
+                  // valueText = value;
+                  print(value);
+                });
+              },
+              controller: textFieldController,
+              decoration: const InputDecoration(hintText: "password..."),
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: textWithRegularStyle(
+                  'submit',
+                  14.0,
+                  Colors.white,
+                  'left',
+                ),
+                onPressed: () {
+                  // setState(() {
+                  strPasswordIs = textFieldController.text;
+                  Navigator.pop(context);
+
+                  // });
+                  checkPasswordIsCorrectOrNot(getRoomDocumentId);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  //
+  checkPasswordIsCorrectOrNot(docId) {
+    //
+    FirebaseFirestore.instance
+        .collection("$strFirebaseMode$collection_room")
+        //
+        .where('documentId', isEqualTo: docId)
+        .where('room_password', isEqualTo: strPasswordIs.toString())
+        //
+        .get()
+        .then((value) {
+      if (kDebugMode) {
+        print(value.docs);
+      }
+
+      if (value.docs.isEmpty) {
+        if (kDebugMode) {
+          print('================================');
+          print('====== PASSWORD NOT MATCHED =====');
+          print('================================');
+        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red[200],
+          content: textWithRegularStyle(
+            'Password is not correct. Please check and try again.',
+            14.0,
+            Colors.black,
+            'left',
+          ),
+        ));
+      } else {
+        for (var element in value.docs) {
+          if (kDebugMode) {
+            print('================================');
+            print('======= PASSWORD MATCHED =======');
+            print('================================');
+            print(element.id);
+          }
+          //
+          textFieldController.text = '';
+
+          //
+          //
+          // create data
+          CollectionReference users = FirebaseFirestore.instance.collection(
+            '$strFirebaseMode$collection_room_premission',
+          );
+          users
+              .add(
+                {
+                  'room_document_id': docId.toString(),
+                  'id': FirebaseAuth.instance.currentUser!.uid,
+                  'time_stamp': DateTime.now().millisecondsSinceEpoch,
+                },
+              )
+              .then((value) =>
+                  //
+                  //     print(
+                  //   'USER SUCCESSFULLY ENTERED PASSWORD... NOW ADD PARTICIPANT',
+                  // ),
+                  addOneParticipantCountInRoom(docId.toString(),
+                      element.data()['total_members'].toString()))
+              .catchError(
+                (error) => print("Failed to add user: $error"),
+              );
+
+          //
+        }
+      }
+    });
+  }
+
+  //
+  // GET PARTICIPANTS
+  addOneParticipantCountInRoom(
+    roomDocId,
+    participantCount,
+  ) {
+    //
+    var sumOne = 0;
+    sumOne = int.parse(participantCount.toString()) + 1;
+    print(sumOne);
+    FirebaseFirestore.instance
+        .collection(
+          '$strFirebaseMode$collection_room',
+        )
+        .doc(roomDocId)
+        .set(
+      {
+        'total_members': sumOne.toString(),
+      },
+      SetOptions(merge: true),
+    ).then(
+      (value1) {
+        // success
+        print('DONE : SUCCESS');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green[200],
+          content: textWithRegularStyle(
+            '!!! Successfully Joined !!!',
+            14.0,
+            Colors.black,
+            'left',
+          ),
+        ));
+      },
     );
   }
 }

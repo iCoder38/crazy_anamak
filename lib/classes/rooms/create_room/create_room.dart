@@ -397,6 +397,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
             'total_comments': '0',
             'total_shares': '0',
             'total_views': '0',
+            'total_members': '0',
             //
             // member
             'member_count': '0',
@@ -412,6 +413,9 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
             'liked_users': [],
             //
             'category': '',
+            //
+            //
+            'room_profile_picture': '',
             //
             // paid
             'room_paid': strRoomPaid.toString(),
