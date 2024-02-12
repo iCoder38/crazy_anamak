@@ -108,6 +108,17 @@ funcConvertTimeStampToDateAndTime(getTimeStamp) {
 }
 
 /* ================================================================ */
+/* ========== DATE , TIME for CHAT ================================ */
+
+convertTimeAndStampForChat(getTimeStamp) {
+  var dt = DateTime.fromMillisecondsSinceEpoch(getTimeStamp);
+  // var d12HourFormat = DateFormat('dd/MM/yyyy, hh:mm').format(dt);
+  var d12HourFormatDateAndTimeboth = DateFormat('hh:mm a').format(dt);
+  // var d12HourFormatTime = DateFormat('hh:mm a').format(dt);
+  return d12HourFormatDateAndTimeboth;
+}
+
+/* ================================================================ */
 /* ================================================================ */
 
 ShimmerLoader({required double width, double? height, Color? color}) {

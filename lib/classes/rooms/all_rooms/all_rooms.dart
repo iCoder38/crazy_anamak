@@ -341,7 +341,9 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const RoomFreeChatScreen(),
+            builder: (context) => RoomFreeChatScreen(
+              getFreeRoomChatData: communityData,
+            ),
           ),
         );
         //
