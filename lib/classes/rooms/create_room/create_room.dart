@@ -372,7 +372,13 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
     }
     FocusScope.of(context).requestFocus(FocusNode());
     //
-
+    var strRoomLocked = '0';
+    if (contRoomPrivatePassword.text.toString() == '') {
+      strRoomLocked = 'no';
+    } else {
+      strRoomLocked = 'yes';
+    }
+    //
     CollectionReference users = FirebaseFirestore.instance.collection(
       '$strFirebaseMode$collection_room',
     );
@@ -413,6 +419,10 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
             'liked_users': [],
             //
             'category': '',
+            //
+            // locked
+            //
+            'room_locked': strRoomLocked.toString(),
             //
             //
             'room_profile_picture': '',

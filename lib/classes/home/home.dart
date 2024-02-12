@@ -1,3 +1,4 @@
+import 'package:crazy_anamak/classes/bottom_bar/rooms/rooms_bottom_bar.dart';
 import 'package:crazy_anamak/classes/headers/utils/utils.dart';
 import 'package:crazy_anamak/classes/rooms/all_rooms/all_rooms.dart';
 import 'package:crazy_anamak/classes/rooms/create_room/create_room.dart';
@@ -247,12 +248,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             //
                             if (kDebugMode) {
-                              print('====> PUSH RIVIEW VIA ICONS');
+                              print('====> PUSH : BOTTOM BAR ====');
                             }
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const AllRoomsScreen(),
+                                builder: (context) =>
+                                    const BottomBarRoomsScreen(),
                               ),
                             );
                           },

@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crazy_anamak/classes/rooms/create_room/create_room.dart';
+import 'package:crazy_anamak/classes/rooms/room_chats/room_free_chats.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -17,8 +18,8 @@ import '../../stories/all_stories/widgets/story_title.dart';
 import '../../stories/all_stories/widgets/total_view.dart';*/
 
 class AllRoomsScreen extends StatefulWidget {
-  const AllRoomsScreen({super.key});
-
+  const AllRoomsScreen({super.key, required this.strRoomLocked});
+  final String strRoomLocked;
   @override
   State<AllRoomsScreen> createState() => _AllRoomsScreenState();
 }
@@ -79,7 +80,7 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
           .collection(
             "$strFirebaseMode$collection_room",
           )
-          // .where('story_type', isEqualTo: 'all')
+          .where('room_locked', isEqualTo: widget.strRoomLocked.toString())
           .where('active', isEqualTo: 'yes')
           .orderBy('time_stamp', descending: true),
       itemBuilder: (context, snapshot) {
@@ -97,7 +98,7 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
               FutureBuilder(
                   future: FirebaseFirestore.instance
                       .collection(
-                        "$strFirebaseMode$collection_room_premission",
+                        "$strFirebaseMode$collection_room_premission/${communityData['documentId']}/data",
                       )
                       .where('room_document_id',
                           isEqualTo: communityData['documentId'])
@@ -267,102 +268,6 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
                     );
                   }),
             ],
-            /*ListTile(
-              trailing: (communityData['room_password'] == '')
-                  ? const Icon(
-                      Icons.chevron_right,
-                      size: 22.0,
-                      color: Colors.grey,
-                    )
-                  : const Icon(
-                      Icons.lock_open,
-                      size: 18.0,
-                      color: Colors.green,
-                    ),
-
-              // title: Text(communityData.toString()),
-              title: (communityData['room_password'] == '')
-                  ? textWithSemiBoldStyle(
-                      //
-                      communityData['title'],
-                      16.0,
-                      Colors.black,
-                    )
-                  : FutureBuilder(
-                      future: FirebaseFirestore.instance
-                          .collection(
-                            "$strFirebaseMode$collection_room_premission",
-                          )
-                          .where('id',
-                              isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                          //
-                          .get(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasData) {
-                          if (kDebugMode) {
-                            print('=====> YES, DATA');
-                            print(snapshot.data!.docs.length);
-                          }
-                          return Text('data');
-                        } else if (snapshot.hasError) {
-                          if (kDebugMode) {
-                            print(snapshot.error);
-                          }
-                        }
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }),
-              /*textWithSemiBoldStyle(
-                //
-                communityData['title'],
-                16.0,
-                Colors.black,
-              ),*/
-              subtitle: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  if (communityData['total_members'] == '0') ...[
-                    //
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: textWithRegularStyle(
-                        //
-                        '${communityData['total_members']} participant',
-                        12.0,
-                        Colors.black,
-                        'left',
-                      ),
-                    ),
-                  ] else if (communityData['total_members'] == '1') ...[
-                    //
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: textWithRegularStyle(
-                        //
-                        '${communityData['total_members']} participant',
-                        12.0,
-                        Colors.black,
-                        'left',
-                      ),
-                    ),
-                  ] else ...[
-                    //
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: textWithRegularStyle(
-                        //
-                        '${communityData['total_members']} participants',
-                        12.0,
-                        Colors.black,
-                        'left',
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),*/
 
             //
             const Divider(
@@ -429,6 +334,18 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
           ],
         ],
       ),
+      onTap: () {
+        //
+        print('object');
+        //
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const RoomFreeChatScreen(),
+          ),
+        );
+        //
+      },
     );
   }
 
@@ -533,7 +450,7 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
           //
           // create data
           CollectionReference users = FirebaseFirestore.instance.collection(
-            '$strFirebaseMode$collection_room_premission',
+            '$strFirebaseMode$collection_room_premission/${docId.toString()}/data',
           );
           users
               .add(
