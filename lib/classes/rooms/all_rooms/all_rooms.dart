@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crazy_anamak/classes/rooms/create_room/create_room.dart';
+import 'package:crazy_anamak/classes/rooms/room_chats/locked_room_chat/locked_room_chat.dart';
 import 'package:crazy_anamak/classes/rooms/room_chats/room_free_chats.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -95,178 +96,7 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
               roomWithoutLockUI(communityData)
               //
             ] else ...[
-              FutureBuilder(
-                  future: FirebaseFirestore.instance
-                      .collection(
-                        "$strFirebaseMode$collection_room_premission/${communityData['documentId']}/data",
-                      )
-                      .where('room_document_id',
-                          isEqualTo: communityData['documentId'])
-                      .where('id',
-                          isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                      //
-                      .get(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
-                      if (kDebugMode) {
-                        print('=====> YES, DATA');
-                        print(snapshot.data!.docs.length);
-                      }
-                      return (snapshot.data!.docs.isEmpty)
-                          ? ListTile(
-                              title: textWithSemiBoldStyle(
-                                //
-                                communityData['title'],
-                                16.0,
-                                Colors.black,
-                              ),
-                              trailing: const Icon(
-                                Icons.lock,
-                                size: 16.0,
-                                color: Colors.redAccent,
-                              ),
-                              subtitle: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  if (communityData['total_members'] ==
-                                      '0') ...[
-                                    //
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: textWithRegularStyle(
-                                        //
-                                        '${communityData['total_members']} participant',
-                                        12.0,
-                                        Colors.black,
-                                        'left',
-                                      ),
-                                    ),
-                                  ] else if (communityData['total_members'] ==
-                                      '1') ...[
-                                    //
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: textWithRegularStyle(
-                                        //
-                                        '${communityData['total_members']} participant',
-                                        12.0,
-                                        Colors.black,
-                                        'left',
-                                      ),
-                                    ),
-                                  ] else ...[
-                                    //
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: textWithRegularStyle(
-                                        //
-                                        '${communityData['total_members']} participants',
-                                        12.0,
-                                        Colors.black,
-                                        'left',
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                              onTap: () {
-                                //
-                                displayTextInputDialog(
-                                  context,
-                                  communityData['title'].toString(),
-                                  communityData['documentId'].toString(),
-                                );
-                              },
-                            )
-                          : ListTile(
-                              title: textWithSemiBoldStyle(
-                                //
-                                communityData['title'],
-                                16.0,
-                                Colors.black,
-                              ),
-                              trailing: const Icon(
-                                Icons.lock_open,
-                                size: 16.0,
-                                color: Colors.green,
-                              ),
-                              subtitle: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  if (communityData['total_members'] ==
-                                      '0') ...[
-                                    //
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: textWithRegularStyle(
-                                        //
-                                        '${communityData['total_members']} participant',
-                                        12.0,
-                                        Colors.black,
-                                        'left',
-                                      ),
-                                    ),
-                                  ] else if (communityData['total_members'] ==
-                                      '1') ...[
-                                    //
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: textWithRegularStyle(
-                                        //
-                                        '${communityData['total_members']} participant',
-                                        12.0,
-                                        Colors.black,
-                                        'left',
-                                      ),
-                                    ),
-                                  ] else ...[
-                                    //
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: textWithRegularStyle(
-                                        //
-                                        '${communityData['total_members']} participants',
-                                        12.0,
-                                        Colors.black,
-                                        'left',
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            );
-                    } else if (snapshot.hasError) {
-                      if (kDebugMode) {
-                        print(snapshot.error);
-                      }
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey,
-                        highlightColor: Colors.transparent,
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                height: 20,
-                                width: 120.0,
-                                color: Colors.amber,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      /*Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
-                          strokeWidth: 0.8,
-                        ),
-                      ),*/
-                    );
-                  }),
+              roomWithLockUIKIT(communityData),
             ],
 
             //
@@ -277,6 +107,187 @@ class _AllRoomsScreenState extends State<AllRoomsScreen> {
         );
       },
     );
+  }
+
+  FutureBuilder<QuerySnapshot<Map<String, dynamic>>> roomWithLockUIKIT(
+      Map<String, dynamic> communityData) {
+    return FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection(
+              "$strFirebaseMode$collection_room_premission/${communityData['documentId']}/data",
+            )
+            .where('room_document_id', isEqualTo: communityData['documentId'])
+            .where('id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            //
+            .get(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasData) {
+            if (kDebugMode) {
+              print('=====> YES, DATA');
+              print(snapshot.data!.docs.length);
+            }
+            return (snapshot.data!.docs.isEmpty)
+                ? ListTile(
+                    title: textWithSemiBoldStyle(
+                      //
+                      communityData['title'],
+                      16.0,
+                      Colors.black,
+                    ),
+                    trailing: const Icon(
+                      Icons.lock,
+                      size: 16.0,
+                      color: Colors.redAccent,
+                    ),
+                    subtitle: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        if (communityData['total_members'] == '0') ...[
+                          //
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: textWithRegularStyle(
+                              //
+                              '${communityData['total_members']} participant',
+                              12.0,
+                              Colors.black,
+                              'left',
+                            ),
+                          ),
+                        ] else if (communityData['total_members'] == '1') ...[
+                          //
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: textWithRegularStyle(
+                              //
+                              '${communityData['total_members']} participant',
+                              12.0,
+                              Colors.black,
+                              'left',
+                            ),
+                          ),
+                        ] else ...[
+                          //
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: textWithRegularStyle(
+                              //
+                              '${communityData['total_members']} participants',
+                              12.0,
+                              Colors.black,
+                              'left',
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    onTap: () {
+                      //
+                      displayTextInputDialog(
+                        context,
+                        communityData['title'].toString(),
+                        communityData['documentId'].toString(),
+                      );
+                    },
+                  )
+                : ListTile(
+                    title: textWithSemiBoldStyle(
+                      //
+                      communityData['title'],
+                      16.0,
+                      Colors.black,
+                    ),
+                    trailing: const Icon(
+                      Icons.lock_open,
+                      size: 16.0,
+                      color: Colors.green,
+                    ),
+                    subtitle: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        if (communityData['total_members'] == '0') ...[
+                          //
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: textWithRegularStyle(
+                              //
+                              '${communityData['total_members']} participant',
+                              12.0,
+                              Colors.black,
+                              'left',
+                            ),
+                          ),
+                        ] else if (communityData['total_members'] == '1') ...[
+                          //
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: textWithRegularStyle(
+                              //
+                              '${communityData['total_members']} participant',
+                              12.0,
+                              Colors.black,
+                              'left',
+                            ),
+                          ),
+                        ] else ...[
+                          //
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: textWithRegularStyle(
+                              //
+                              '${communityData['total_members']} participants',
+                              12.0,
+                              Colors.black,
+                              'left',
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    onTap: () {
+                      //
+                      //
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LockedRoomChatScreen(
+                            getAllDataForLockedRoom: communityData,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+          } else if (snapshot.hasError) {
+            if (kDebugMode) {
+              print(snapshot.error);
+            }
+          }
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey,
+              highlightColor: Colors.transparent,
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      height: 20,
+                      width: 120.0,
+                      color: Colors.amber,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            /*Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                        strokeWidth: 0.8,
+                      ),
+                    ),*/
+          );
+        });
   }
 
   ListTile roomWithoutLockUI(Map<String, dynamic> communityData) {

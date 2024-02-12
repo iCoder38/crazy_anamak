@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../headers/utils/utils.dart';
 // import '../../all_stories/story_details/story_details.dart';
-import 'story_like.dart';
+// import 'story_like.dart';
 
 checkUserAllActivity(storyDocumentId) {
   //
@@ -18,8 +18,7 @@ checkUserAllActivity(storyDocumentId) {
   //
   FirebaseFirestore.instance
       .collection(
-        // '${strFirebaseMode}story_data/story_view/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
-        '${strFirebaseMode}story_data/story_view/$storyDocumentId',
+        '${strFirebaseMode}story_data/story_view/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
       )
       .get()
       .then((value) {
@@ -57,8 +56,7 @@ checkUserAllActivity(storyDocumentId) {
 addStoryDataAndOneView(storyDocumentId) {
   //
   CollectionReference users = FirebaseFirestore.instance.collection(
-    // '${strFirebaseMode}story_data/story_view/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
-    '${strFirebaseMode}story_data/story_view/$storyDocumentId',
+    '${strFirebaseMode}story_data/story_view/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
   );
   users
       .add(

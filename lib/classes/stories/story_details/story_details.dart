@@ -256,8 +256,8 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
     //
     await FirebaseFirestore.instance
         .collection(
-          // '${strFirebaseMode}story_data/story_like/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
-          '${strFirebaseMode}story_data/story_like/$storyDocumentId',
+          '${strFirebaseMode}story_data/story_like/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
+          // '${strFirebaseMode}story_data/story_like/$storyDocumentId',
         )
         .get()
         .then((value) {
@@ -336,8 +336,8 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
             /////////////////////////////////////
 
             CollectionReference users = FirebaseFirestore.instance.collection(
-              // '${strFirebaseMode}story_data/story_view/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
-              '${strFirebaseMode}story_data/story_like/$storyDocumentId',
+              '${strFirebaseMode}story_data/story_like/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
+              // '${strFirebaseMode}story_data/story_like/$storyDocumentId',
             );
             users
                 .add(
@@ -354,7 +354,7 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                       //
                       FirebaseFirestore.instance
                           .collection(
-                            '${strFirebaseMode}story_data/story_like/$storyDocumentId',
+                            '${strFirebaseMode}story_data/story_like/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
                           )
                           .doc(likeValue.id)
                           .set(
@@ -390,7 +390,7 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
             // UPDATE -1 LIKE
             FirebaseFirestore.instance
                 .collection(
-                  '${strFirebaseMode}story_data/story_like/$storyDocumentId',
+                  '${strFirebaseMode}story_data/story_like/$storyDocumentId/${FirebaseAuth.instance.currentUser!.uid}/data',
                 )
                 .doc(strLikeDocumentIdForDelete)
                 .delete()
