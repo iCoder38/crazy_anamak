@@ -30,6 +30,7 @@ class _LockedRoomChatScreenState extends State<LockedRoomChatScreen> {
   @override
   void initState() {
     //
+    // print(widget.getAllDataForLockedRoom['documentId'].toString());
     // dummyChat(); // scrollToEnd();
     super.initState();
   }
@@ -170,57 +171,157 @@ class _LockedRoomChatScreenState extends State<LockedRoomChatScreen> {
               },
             ),
           ),
-          sendMessageuIKIT()
+          StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection(
+                    "${strFirebaseMode}settings/room_settings/${widget.getAllDataForLockedRoom['documentId'].toString()}",
+                  )
+                  .where('room_document_id',
+                      isEqualTo: widget.getAllDataForLockedRoom['documentId']
+                          .toString())
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  //
+                  if (kDebugMode) {
+                    print('===== SETTINGS UPDATE =====');
+                  }
+
+                  var getSnapShopValue = snapshot.data!.docs.reversed.toList();
+                  if (kDebugMode) {
+                    print(getSnapShopValue[0].data());
+                  }
+                  //
+                  return sendMessageuIKIT(getSnapShopValue[0].data());
+                  //
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
         ],
       ),
       /**/
     );
   }
 
-  Align sendMessageuIKIT() {
+  Align sendMessageuIKIT(getRealTimeServerData) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         color: Colors.transparent,
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: contTextSendMessage,
-                  minLines: 1,
-                  maxLines: 5,
-                  decoration: const InputDecoration(
-                    // labelText: '',
-                    hintText: 'write something',
-                  ),
-                ),
-              ),
-            ),
-            //
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 40,
-                width: 40,
-                child: IconButton(
-                  onPressed: () {
-                    //
-                    sendAndSaveMessageInDB();
-                  },
-                  icon: const Icon(
-                    Icons.send,
-                  ),
-                ),
-              ),
-            ),
+        child: (getRealTimeServerData['permission_message'] == '0')
+            ? (widget.getAllDataForLockedRoom['roomAdminId'].toString() ==
+                    FirebaseAuth.instance.currentUser!.uid)
+                ? groupAdminSendMessageUIKIT(getRealTimeServerData)
+                : onlyAdminMessageTextUI()
+            : groupAdminSendMessageUIKIT(getRealTimeServerData),
+      ),
+    );
+  }
 
-            //
-          ],
+  Row groupAdminSendMessageUIKIT(getServerDataForPin) {
+    return Row(
+      children: [
+        if (getServerDataForPin['permission_image'] == '0') ...[
+          //
+          (widget.getAllDataForLockedRoom['roomAdminId'].toString() ==
+                  FirebaseAuth.instance.currentUser!.uid)
+              ? fileAttachmentPinUIKIT()
+              : const SizedBox(
+                  width: 0,
+                ),
+        ] else ...[
+          fileAttachmentPinUIKIT(),
+        ],
+
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              keyboardType: TextInputType.text,
+              controller: contTextSendMessage,
+              minLines: 1,
+              maxLines: 5,
+              decoration: const InputDecoration(
+                // labelText: '',
+                hintText: 'write something',
+              ),
+            ),
+          ),
         ),
+        //
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 40,
+            width: 40,
+            child: IconButton(
+              onPressed: () {
+                //
+                sendAndSaveMessageInDB();
+              },
+              icon: const Icon(
+                Icons.send,
+              ),
+            ),
+          ),
+        ),
+
+        //
+      ],
+    );
+  }
+
+  Padding fileAttachmentPinUIKIT() {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: SizedBox(
+        height: 40,
+        width: 40,
+        child: IconButton(
+          onPressed: () {
+            //
+            // sendAndSaveMessageInDB();
+          },
+          icon: const Icon(
+            Icons.attach_file,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding onlyAdminMessageTextUI() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          textWithRegularStyle(
+            'Only',
+            12.0,
+            Colors.black,
+            'left',
+          ),
+          textWithSemiBoldStyle(
+            ' admin ',
+            14.0,
+            Colors.black,
+          ),
+          textWithRegularStyle(
+            ' message in this group',
+            12.0,
+            Colors.black,
+            'left',
+          ),
+        ],
       ),
     );
   }
