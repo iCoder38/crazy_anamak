@@ -108,6 +108,28 @@ class _AllStoriesScreenState extends State<AllStoriesScreen> {
                 ),
               ),
               //
+              /*Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 240,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(
+                      12.0,
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                      12.0,
+                    ),
+                    child: Image.asset(
+                      'assets/images/dummy2.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),*/
               //
               TotalViewsOnStoryScreen(
                 strViewCount: communityData['total_views'],

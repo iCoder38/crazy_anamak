@@ -29,7 +29,7 @@ class StoryDescriptioScreennState extends State<StoryDescriptionScreen> {
             //
             widget.getDescription,
 
-            trimLines: 6,
+            trimLines: 4,
             style: GoogleFonts.poppins(
               fontSize: 12.0,
               // fontWeight: FontWeight.w700,
