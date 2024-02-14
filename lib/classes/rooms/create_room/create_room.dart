@@ -421,9 +421,18 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
             'category': '',
             //
             // locked
-            //
             'room_locked': strRoomLocked.toString(),
             //
+            // room settings ( 0 = false , 1 = true)
+            'permissions': {
+              'permission_message': false,
+              'permission_image': false,
+              'premission_video': false,
+            },
+            'test': [
+              {'test1': '1'}
+            ],
+
             //
             'room_profile_picture': '',
             //

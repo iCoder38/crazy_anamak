@@ -1,103 +1,35 @@
-// import 'package:flutter/foundation.dart';
-// ignore_for_file: prefer_typing_uninitialized_variables
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../headers/utils/utils.dart';
 
-class RoomFreeChatScreen extends StatefulWidget {
-  const RoomFreeChatScreen({super.key, this.getFreeRoomChatData});
-  //
-  final getFreeRoomChatData;
-  //
+class NewPublicChatRoomScreen extends StatefulWidget {
+  const NewPublicChatRoomScreen(
+      {super.key, required this.strSenderName, required this.strSenderChatId});
+
+  final String strSenderName;
+  final String strSenderChatId;
+
   @override
-  State<RoomFreeChatScreen> createState() => _RoomFreeChatScreenState();
+  State<NewPublicChatRoomScreen> createState() =>
+      _NewPublicChatRoomScreenState();
 }
 
-class _RoomFreeChatScreenState extends State<RoomFreeChatScreen> {
-  //
+class _NewPublicChatRoomScreenState extends State<NewPublicChatRoomScreen> {
   TextEditingController contTextSendMessage = TextEditingController();
   //
-  var strMessage = '';
-  bool _needsScroll = false;
-  final ScrollController controller = ScrollController();
-  //
-  @override
-  void initState() {
-    //
-    // dummyChat(); // scrollToEnd();
-    // print(widget.getFreeRoomChatData['permissions']['permission_image']
-    // .toString());
-    super.initState();
-  }
-
-  sendAndSaveMessageInDB() {
-    strMessage = contTextSendMessage.text;
-    contTextSendMessage.text = '';
-    CollectionReference users = FirebaseFirestore.instance.collection(
-      '${strFirebaseMode}room_chats/free_room_chat/${widget.getFreeRoomChatData['documentId'].toString()}',
-    );
-
-    users
-        .add(
-          {
-            'sender_id': FirebaseAuth.instance.currentUser!.uid,
-            'message': strMessage.toString(),
-            'time_stamp': DateTime.now().millisecondsSinceEpoch,
-            //
-            // chat type
-            'type': 'text'
-          },
-        )
-        .then((value) =>
-            //
-
-            FirebaseFirestore.instance
-                .collection(
-                  '${strFirebaseMode}room_chats/free_room_chat/${widget.getFreeRoomChatData['documentId'].toString()}',
-                )
-                .doc(value.id)
-                .set(
-              {
-                'documentId': value.id,
-              },
-              SetOptions(merge: true),
-            ).then(
-              (value1) {
-                // success
-                print('dummy chat with add document id ');
-              },
-            ))
-        .catchError(
-          (error) => print("Failed to add user: $error"),
-        );
-  }
-
-  //
-  scrollToEnd() async {
-    if (_needsScroll) {
-      _needsScroll = false;
-      controller.animateTo(controller.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
-    }
-  }
-
-//
   @override
   Widget build(BuildContext context) {
     //
     Size size = MediaQuery.of(context).size;
     //
-
     return Scaffold(
       appBar: AppBar(
         title: textWithSemiBoldStyle(
-          'Free room chat',
+          'Public',
           16.0,
           Colors.white,
         ),
@@ -112,9 +44,6 @@ class _RoomFreeChatScreenState extends State<RoomFreeChatScreen> {
         ),
         backgroundColor: const Color.fromRGBO(31, 43, 66, 1),
       ),
-      /*
-      
-                        */
       body: Stack(
         children: [
           Container(
@@ -127,16 +56,16 @@ class _RoomFreeChatScreenState extends State<RoomFreeChatScreen> {
               reverse: true,
               query: FirebaseFirestore.instance
                   .collection(
-                    '${strFirebaseMode}room_chats/free_room_chat/${widget.getFreeRoomChatData['documentId'].toString()}',
+                    '${strFirebaseMode}chats/public_chats/data',
                   )
                   .orderBy('time_stamp', descending: true),
               itemBuilder: (context, snapshot) {
                 Map<String, dynamic> communityData = snapshot.data();
                 //
                 return (communityData['sender_id'].toString() ==
-                        FirebaseAuth.instance.currentUser!.uid)
-                    ? receiverUIKIT(communityData)
-                    : senderUIKIT(communityData);
+                        FirebaseAuth.instance.currentUser!.uid.toString())
+                    ? senderUIKIT(communityData)
+                    : receiverUIKIT(communityData);
               },
             ),
           ),
@@ -179,7 +108,8 @@ class _RoomFreeChatScreenState extends State<RoomFreeChatScreen> {
                 child: IconButton(
                   onPressed: () {
                     //
-                    sendAndSaveMessageInDB();
+                    sendMessageViaFirebase(contTextSendMessage.text);
+                    contTextSendMessage.text = '';
                   },
                   icon: const Icon(
                     Icons.send,
@@ -414,5 +344,52 @@ class _RoomFreeChatScreenState extends State<RoomFreeChatScreen> {
         //
       ],
     );
+  }
+
+  sendMessageViaFirebase(strLastMessageEntered) {
+    // print(cont_txt_send_message.text);
+
+    CollectionReference users = FirebaseFirestore.instance.collection(
+      '${strFirebaseMode}chats/public_chats/data',
+    );
+
+    users
+        .add(
+          {
+            'sender_chat_user_id': widget.strSenderChatId.toString(),
+            'sender_name': widget.strSenderName.toString(),
+            'sender_gender': 'gender',
+            'sender_id': FirebaseAuth.instance.currentUser!.uid,
+            'message': strLastMessageEntered.toString(),
+            'time_stamp': DateTime.now().millisecondsSinceEpoch,
+            'room': 'public',
+            'type': 'text',
+          },
+        )
+        .then(
+          (value) => FirebaseFirestore.instance
+              .collection(
+                '${strFirebaseMode}chats/public_chats/data',
+              )
+              .doc(value.id)
+              .set(
+            {
+              'documentId': value.id,
+            },
+            SetOptions(merge: true),
+          ).then(
+            (value1) {
+              // success
+              if (kDebugMode) {
+                print('==============================================');
+                print('MESSAGE SENT SUCCESSFULLY IN PUBLIC CHAT ROOM');
+                print('==============================================');
+              }
+            },
+          ),
+        )
+        .catchError(
+          (error) => print("Failed to add user: $error"),
+        );
   }
 }

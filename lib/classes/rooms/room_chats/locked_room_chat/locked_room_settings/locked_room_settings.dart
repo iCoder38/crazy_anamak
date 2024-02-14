@@ -36,16 +36,86 @@ class _LockedRoomSettingsScreenState extends State<LockedRoomSettingsScreen> {
   @override
   void initState() {
     if (kDebugMode) {
+      print('======== FULL ROOM DATA =============');
       print(widget.getLockedRoomSettings);
+      print('=====================================');
     }
     //
     strRoomDocumentId = widget.getLockedRoomSettings['documentId'].toString();
     //
-    getThisGroupSetting();
+    checkAllPermissionStatus();
+    // getThisGroupSetting();
     super.initState();
   }
 
-  getThisGroupSetting() {
+  checkAllPermissionStatus() {
+    //
+    /*
+    bool messageSwitch = true;
+    bool imageSwitch = true;
+    bool videoSwitch = true;
+    */
+    //
+    // print(messageSwitch);
+    // print(imageSwitch);
+    // print(videoSwitch);
+    // print(widget
+    // .getLockedRoomSettings['permissions']['permission_video'].runtimeType);
+    messageSwitch =
+        widget.getLockedRoomSettings['permissions']['permission_message'];
+    imageSwitch =
+        widget.getLockedRoomSettings['permissions']['permission_image'];
+    videoSwitch =
+        widget.getLockedRoomSettings['permissions']['permission_video'];
+    // print(messageSwitch);
+    // print(imageSwitch);
+    // print(videoSwitch);
+    /*if (widget.getLockedRoomSettings['permissions']['permission_message']
+            .toString() ==
+        '0') {
+      //
+      messageSwitch = widget.getLockedRoomSettings['permissions']['permission_message'];
+    } else {
+      //
+      messageSwitch = true;
+    }
+    //
+    // image
+    if (widget.getLockedRoomSettings['permissions']['permission_image']
+            .toString() ==
+        '0') {
+      //
+      imageSwitch = false;
+    } else {
+      //
+      imageSwitch = true;
+    }
+    //
+    // video
+    if (widget.getLockedRoomSettings['permissions']['permission_video']
+            .toString() ==
+        '0') {
+      //
+      videoSwitch = false;
+    } else {
+      //
+      videoSwitch = true;
+    }
+
+    if (kDebugMode) {
+      print('======== FULL ROOM DATA =============');
+      print(messageSwitch);
+      print('=====================================');
+    }*/
+    //
+    setState(() {
+      screenLoader = false;
+    });
+    // check image
+    // check video
+  }
+
+  /*getThisGroupSetting() {
     //
     if (kDebugMode) {
       print('========= ROOM DOCUMENT ID ========');
@@ -147,7 +217,7 @@ class _LockedRoomSettingsScreenState extends State<LockedRoomSettingsScreen> {
         }
       }
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -212,9 +282,10 @@ class _LockedRoomSettingsScreenState extends State<LockedRoomSettingsScreen> {
                       print(messageSwitch);
                       // HapticFeedback.lightImpact();
                       // // edit
-                      messageSwitch == false
-                          ? editRoomSettings('permission_message', '0')
-                          : editRoomSettings('permission_message', '1');
+                      /*messageSwitch == false
+                          ? editRoomSettings('message', '0')
+                          : editRoomSettings('message', '1');*/
+                      editRoomSettings();
                     },
                   ),
                 ),
@@ -245,9 +316,11 @@ class _LockedRoomSettingsScreenState extends State<LockedRoomSettingsScreen> {
                       //
                       HapticFeedback.lightImpact();
                       // edit
-                      imageSwitch == false
+                      editRoomSettings();
+                      //
+                      /*imageSwitch == false
                           ? editRoomSettings('permission_image', '0')
-                          : editRoomSettings('permission_image', '1');
+                          : editRoomSettings('permission_image', '1');*/
                     },
                   ),
                 ),
@@ -277,9 +350,11 @@ class _LockedRoomSettingsScreenState extends State<LockedRoomSettingsScreen> {
                       //
                       HapticFeedback.lightImpact();
                       // edit
-                      videoSwitch == false
+                      editRoomSettings();
+                      //
+                      /*videoSwitch == false
                           ? editRoomSettings('permission_video', '0')
-                          : editRoomSettings('permission_video', '1');
+                          : editRoomSettings('permission_video', '1');*/
                     },
                   ),
                 ),
@@ -292,23 +367,29 @@ class _LockedRoomSettingsScreenState extends State<LockedRoomSettingsScreen> {
 
   //
   /// edit data
-  editRoomSettings(key, value) {
+  editRoomSettings() {
     //
     /*print(strRoomDocumentId);
     print(strRoomSettingsDocumentId);
     print(key);
     print(value);*/
     //
+    // if (key == 'message') {
+    //
     FirebaseFirestore.instance
         .collection(
-          '${strFirebaseMode}settings/room_settings/$strRoomDocumentId',
+          '${strFirebaseMode}rooms',
         )
-        .doc(strRoomSettingsDocumentId)
-        .set(
+        .doc(strRoomDocumentId)
+        .update(
       {
-        key: value,
+        'permissions': {
+          'permission_image': imageSwitch,
+          'permission_message': messageSwitch,
+          'permission_video': videoSwitch,
+        }
       },
-      SetOptions(merge: true),
+      //  SetOptions(merge: true),
     ).then(
       (value1) {
         //
@@ -324,5 +405,68 @@ class _LockedRoomSettingsScreenState extends State<LockedRoomSettingsScreen> {
         ));
       },
     );
+    //
+    /*} else if (key == 'image') {
+      FirebaseFirestore.instance
+          .collection(
+            '${strFirebaseMode}rooms',
+          )
+          .doc(strRoomDocumentId)
+          .update(
+        {
+          'permissions': {
+            'permission_image': '1.0',
+            'permission_message': '1.0',
+            // 'permission_video': '1.0',
+          }
+        },
+        //  SetOptions(merge: true),
+      ).then(
+        (value1) {
+          //
+          //print('done');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green[200],
+            content: textWithRegularStyle(
+              '!!! Edited !!!',
+              14.0,
+              Colors.black,
+              'left',
+            ),
+          ));
+        },
+      );
+    } else {
+      //
+      FirebaseFirestore.instance
+          .collection(
+            '${strFirebaseMode}rooms',
+          )
+          .doc(strRoomDocumentId)
+          .update(
+        {
+          'permissions': {
+            'permission_image': '1.0',
+            'permission_message': '1.0',
+            // 'permission_video': '1.0',
+          }
+        },
+        //  SetOptions(merge: true),
+      ).then(
+        (value1) {
+          //
+          //print('done');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green[200],
+            content: textWithRegularStyle(
+              '!!! Edited !!!',
+              14.0,
+              Colors.black,
+              'left',
+            ),
+          ));
+        },
+      );
+    }*/
   }
 }

@@ -7,6 +7,7 @@ import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../../headers/utils/utils.dart';
 
@@ -27,10 +28,14 @@ class _LockedRoomChatScreenState extends State<LockedRoomChatScreen> {
   bool _needsScroll = false;
   final ScrollController controller = ScrollController();
   //
+  var getFullDataAfterLoadChats;
+
   @override
   void initState() {
     //
-    // print(widget.getAllDataForLockedRoom['documentId'].toString());
+    if (kDebugMode) {
+      print(widget.getAllDataForLockedRoom['documentId'].toString());
+    }
     // dummyChat(); // scrollToEnd();
     super.initState();
   }
@@ -164,6 +169,8 @@ class _LockedRoomChatScreenState extends State<LockedRoomChatScreen> {
               itemBuilder: (context, snapshot) {
                 Map<String, dynamic> communityData = snapshot.data();
                 //
+
+                //
                 return (communityData['sender_id'].toString() ==
                         FirebaseAuth.instance.currentUser!.uid)
                     ? receiverUIKIT(communityData)
@@ -171,12 +178,13 @@ class _LockedRoomChatScreenState extends State<LockedRoomChatScreen> {
               },
             ),
           ),
+          // sendMessageuIKIT(),
           StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection(
-                    "${strFirebaseMode}settings/room_settings/${widget.getAllDataForLockedRoom['documentId'].toString()}",
+                    "${strFirebaseMode}rooms",
                   )
-                  .where('room_document_id',
+                  .where('documentId',
                       isEqualTo: widget.getAllDataForLockedRoom['documentId']
                           .toString())
                   .snapshots(),
@@ -192,6 +200,8 @@ class _LockedRoomChatScreenState extends State<LockedRoomChatScreen> {
                   if (kDebugMode) {
                     print(getSnapShopValue[0].data());
                   }
+                  //
+                  // getFullDataAfterLoadChats = getSnapShopValue[0].data();
                   //
                   return sendMessageuIKIT(getSnapShopValue[0].data());
                   //
@@ -210,26 +220,98 @@ class _LockedRoomChatScreenState extends State<LockedRoomChatScreen> {
     );
   }
 
-  Align sendMessageuIKIT(getRealTimeServerData) {
+  Align sendMessageuIKIT(getData) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         color: Colors.transparent,
-        child: (getRealTimeServerData['permission_message'] == '0')
-            ? (widget.getAllDataForLockedRoom['roomAdminId'].toString() ==
-                    FirebaseAuth.instance.currentUser!.uid)
-                ? groupAdminSendMessageUIKIT(getRealTimeServerData)
-                : onlyAdminMessageTextUI()
-            : groupAdminSendMessageUIKIT(getRealTimeServerData),
+        child: Row(
+          children: [
+            if (getData['permissions']['permission_message'] == true) ...[
+              //
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    controller: contTextSendMessage,
+                    minLines: 1,
+                    maxLines: 5,
+                    decoration: const InputDecoration(
+                      // labelText: '',
+                      hintText: 'write something',
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: IconButton(
+                    onPressed: () {
+                      //
+                      sendAndSaveMessageInDB();
+                    },
+                    icon: const Icon(
+                      Icons.send,
+                    ),
+                  ),
+                ),
+              ),
+            ] else ...[
+              //
+              if (getData['roomAdminId'].toString() ==
+                  FirebaseAuth.instance.currentUser!.uid.toString()) ...[
+                //
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: contTextSendMessage,
+                      minLines: 1,
+                      maxLines: 5,
+                      decoration: const InputDecoration(
+                        // labelText: '',
+                        hintText: 'write something',
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: IconButton(
+                      onPressed: () {
+                        //
+                        sendAndSaveMessageInDB();
+                      },
+                      icon: const Icon(
+                        Icons.send,
+                      ),
+                    ),
+                  ),
+                ),
+              ] else ...[
+                //
+                Expanded(child: onlyAdminMessageTextUI()),
+              ]
+            ],
+          ],
+        ),
       ),
     );
   }
 
-  Row groupAdminSendMessageUIKIT(getServerDataForPin) {
+  Row groupAdminSendMessageUIKIT() {
     return Row(
       children: [
-        if (getServerDataForPin['permission_image'] == '0') ...[
+        /*if (getServerDataForPin['permission_image'] == '0') ...[
           //
           (widget.getAllDataForLockedRoom['roomAdminId'].toString() ==
                   FirebaseAuth.instance.currentUser!.uid)
@@ -239,7 +321,7 @@ class _LockedRoomChatScreenState extends State<LockedRoomChatScreen> {
                 ),
         ] else ...[
           fileAttachmentPinUIKIT(),
-        ],
+        ],*/
 
         Expanded(
           child: Padding(

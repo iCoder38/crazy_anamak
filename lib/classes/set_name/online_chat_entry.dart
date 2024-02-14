@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_typing_uninitialized_variables, avoid_print
 
+import 'package:crazy_anamak/classes/public_chat_room/public_chat/new_public_chat_room.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
 
@@ -327,7 +328,7 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
   }
 
 /**********************************************************************/
-/// *******************************************************************
+  /// *******************************************************************
 
   // CHECK PROFILE DATA AFTER CLICK ON SET
   funcSetProfileForChat() {
@@ -418,10 +419,19 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
                 print('======> value1');
               }
 
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => PublicChatRoomScreen(
+              //       strSenderName: contSetName.text.toString(),
+              //       strSenderChatId: chatUserId.toString(),
+              //     ),
+              //   ),
+              // );
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PublicChatRoomScreen(
+                  builder: (context) => NewPublicChatRoomScreen(
                     strSenderName: contSetName.text.toString(),
                     strSenderChatId: chatUserId.toString(),
                   ),
@@ -463,10 +473,19 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
       SetOptions(merge: true),
     ).then(
       (value1) {
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => PublicChatRoomScreen(
+        //       strSenderName: contSetName.text.toString(),
+        //       strSenderChatId: chatUserId.toString(),
+        //     ),
+        //   ),
+        // );
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PublicChatRoomScreen(
+            builder: (context) => NewPublicChatRoomScreen(
               strSenderName: contSetName.text.toString(),
               strSenderChatId: chatUserId.toString(),
             ),
