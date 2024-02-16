@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:shimmer/shimmer.dart';
 
 var str_sign_up_alert_message =
@@ -99,6 +100,12 @@ Text textWithSemiBoldStyle(str, textSize, textColor) {
 /* ================================================================ */
 
 /* ========== CONVERT TIMESTAMP TO DATE AND TIME =============== */
+convertTimeStampWithData(getTimeStamp) {
+  var dt = DateTime.fromMillisecondsSinceEpoch(getTimeStamp);
+  var d12HourFormat = DateFormat('yyyy-MM-dd').format(dt);
+  // var d12HourFormatTime = DateFormat('hh:mm a').format(dt);
+  return d12HourFormat;
+}
 
 funcConvertTimeStampToDateAndTime(getTimeStamp) {
   var dt = DateTime.fromMillisecondsSinceEpoch(getTimeStamp);
@@ -116,6 +123,46 @@ convertTimeAndStampForChat(getTimeStamp) {
   var d12HourFormatDateAndTimeboth = DateFormat('hh:mm a').format(dt);
   // var d12HourFormatTime = DateFormat('hh:mm a').format(dt);
   return d12HourFormatDateAndTimeboth;
+}
+
+/* ================================================================ */
+/* ========== CONVERT TIMESTAMP TO DATE AND TIME =============== */
+
+funcConvertTimeStampToDateAndTimeForChat(getTimeStamp) {
+  var dt = DateTime.fromMillisecondsSinceEpoch(getTimeStamp);
+  // var d12HourFormat = DateFormat('dd/MM/yyyy, hh:mm').format(dt);
+  var d12HourFormatDateAndTimeboth = DateFormat('yyyy/MM/dd').format(dt);
+  // var d12HourFormatTime = DateFormat('hh:mm a').format(dt);
+// Jiffy.parse(string)
+  DateTime now = DateTime.now();
+  // print('now');
+  // print(d12HourFormatDateAndTimeboth);
+  // String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+  String formattedDate = DateFormat('yyyy/MM/dd').format(now);
+  /*if (kDebugMode) {
+    print('today ==> $formattedDate');
+  }*/
+  // compare time stamp with today's date
+  var compare = Jiffy.parse(formattedDate)
+      .isSame(Jiffy.parse(d12HourFormatDateAndTimeboth));
+
+  if (compare == true) {
+    return 'today';
+  } else {
+    // 1
+    /*var d12HourFormatDateAndTimeboth2 =
+        DateFormat('yyyy - MMM - dd, hh:mm').format(dt);
+    return d12HourFormatDateAndTimeboth2;*/
+    // 2
+    var d12HourFormatDateAndTimeboth2 = DateFormat('yyyy/MM/dd').format(dt);
+    var pastDate = Jiffy.parse(d12HourFormatDateAndTimeboth2)
+        .from(Jiffy.parse(formattedDate));
+    return pastDate;
+    // return compare;
+  }
+
+  // Jiffy.parse(d12HourFormatDateAndTimeboth).fromNow();
+  // return d12HourFormatDateAndTimeboth;
 }
 
 /* ================================================================ */

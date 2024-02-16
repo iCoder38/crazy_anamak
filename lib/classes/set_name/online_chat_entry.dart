@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_typing_uninitialized_variables, avoid_print
 
+import 'package:crazy_anamak/classes/bottom_bar/public_room_bottom_bar/public_room_bottom_bar.dart';
 import 'package:crazy_anamak/classes/public_chat_room/public_chat/new_public_chat_room.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -57,13 +58,34 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
   @override
   void initState() {
     randomNames = RandomNames(Zone.india);
-    print("India:     ${randomNames.fullName()}");
+    // comapre();
+    // print("India:     ${randomNames.fullName()}");
     contSetName.text = (strSelectGender == '1')
         ? '${randomNames.manFullName()}'
         : (strSelectGender == '2')
             ? '${randomNames.womanFullName()}'
             : '${randomNames.name()}';
     super.initState();
+  }
+
+  comapre() {
+    //
+    var dialogTimeStamp = convertTimeStampWithData(1708102787695);
+    print(dialogTimeStamp);
+    DateTime dt1 = DateTime.parse(dialogTimeStamp.toString());
+    DateTime dt2 = DateTime.parse("2023-02-16");
+
+    if (dt1.compareTo(dt2) == 0) {
+      print("Both date time are at same moment.");
+    }
+
+    if (dt1.compareTo(dt2) < 0) {
+      print("DT1 is before DT2");
+    }
+
+    if (dt1.compareTo(dt2) > 0) {
+      print("DT1 is after DT2");
+    }
   }
 
   @override
@@ -953,16 +975,23 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
         //     ),
         //   ),
         // );
+        /**/
+        print('object 12121');
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => NewPublicChatRoomScreen(
-              strSenderName: contSetName.text.toString(),
-              strSenderChatId: chatUserId.toString(),
+            builder: (context) => PublicRoomBottomScreen(
+              strGetSenderName: contSetName.text.toString(),
+              strGetSenderChatId: chatUserId.toString(),
               strGetGender: strSelectGender.toString(),
             ),
           ),
         );
+        // PublicRoomBottomScreen(
+        //   strGetSenderName: contSetName.text.toString(),
+        //   strGetSenderChatId: chatUserId.toString(),
+        //   strGetGender: strSelectGender.toString(),
+        // );
         //
         setState(() {
           strButtonloader = '0'.toString();
