@@ -14,7 +14,7 @@ class AppBarScreen extends StatefulWidget implements PreferredSizeWidget {
     super.key,
     required this.str_app_bar_title,
     required this.str_status,
-  })  : preferredSize = const Size.fromHeight(56.0);
+  }) : preferredSize = const Size.fromHeight(56.0);
 
   @override
   State<AppBarScreen> createState() => _AppBarScreenState();
@@ -49,7 +49,7 @@ class _AppBarScreenState extends State<AppBarScreen> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             automaticallyImplyLeading: true,
-            backgroundColor: app_blue_color,
+            backgroundColor: const Color.fromARGB(200, 0, 0, 0),
           );
   }
 }

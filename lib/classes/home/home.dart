@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crazy_anamak/classes/bottom_bar/rooms/rooms_bottom_bar.dart';
 import 'package:crazy_anamak/classes/headers/utils/utils.dart';
 import 'package:crazy_anamak/classes/rooms/all_rooms/all_rooms.dart';
@@ -27,26 +28,144 @@ class _HomeScreenState extends State<HomeScreen> {
     //
 
     //
-    arrHomeList = [
+    /*arrHomeList = [
       {
-        'id': '1',
-        'title': 'Chat',
-        'image': 'assets/images/chat.png',
+        'name': 'Adventure',
+        'active': 'yes',
       },
       {
-        'id': '2',
-        'title': 'Communities',
-        'image': 'assets/images/stories.png',
+        'name': 'Mystery',
+        'active': 'yes',
       },
       {
-        'id': '3',
-        'title': 'Settings',
-        'image': 'assets/gif/settings.png',
+        'name': 'Romance',
+        'active': 'yes',
+      },
+      {
+        'name': 'Science Fiction',
+        'active': 'yes',
+      },
+      {
+        'name': 'Fantasy',
+        'active': 'yes',
+      },
+      {
+        'name': 'Horror',
+        'active': 'yes',
+      },
+      {
+        'name': 'Humor',
+        'active': 'yes',
+      },
+      {
+        'name': 'Bildungsroman',
+        'active': 'yes',
+      },
+      {
+        'name': 'Dystopian',
+        'active': 'yes',
+      },
+      {
+        'name': 'Fairytale',
+        'active': 'yes',
+      },
+      {
+        'name': 'Historical Fiction',
+        'active': 'yes',
+      },
+      {
+        'name': 'Magical Realism',
+        'active': 'yes',
+      },
+      {
+        'name': 'Thriller',
+        'active': 'yes',
+      },
+      {
+        'name': 'Biography',
+        'active': 'yes',
+      },
+      {
+        'name': 'Memory',
+        'active': 'yes',
+      },
+      {
+        'name': 'History',
+        'active': 'yes',
+      },
+      {
+        'name': 'True Crime',
+        'active': 'yes',
+      },
+      {
+        'name': 'Science',
+        'active': 'yes',
+      },
+      {
+        'name': 'Travel',
+        'active': 'yes',
+      },
+      {
+        'name': 'Food',
+        'active': 'yes',
+      },
+      {
+        'name': 'Sports',
+        'active': 'yes',
+      },
+      {
+        'name': 'Self-Help',
+        'active': 'yes',
+      },
+      {
+        'name': 'Humor',
+        'active': 'yes',
+      },
+      {
+        'name': 'Opinion',
+        'active': 'yes',
       },
     ];
     if (kDebugMode) {
       print('length ===> ${arrHomeList.length}');
     }
+    //
+    for (int i = 0; i < arrHomeList.length; i++) {
+      //
+      CollectionReference users = FirebaseFirestore.instance.collection(
+        '${strFirebaseMode}category_story',
+      );
+
+      users
+          .add(
+            {
+              'name': arrHomeList[i]['name'].toString(),
+              'active': arrHomeList[i]['active'].toString(),
+            },
+          )
+          .then(
+            (value) =>
+                //
+                FirebaseFirestore.instance
+                    .collection("${strFirebaseMode}category_story")
+                    .doc(value.id)
+                    .set(
+              {
+                'documentId': value.id,
+              },
+              SetOptions(merge: true),
+            ).then(
+              (value1) {
+                // success
+                print('done ===> $i');
+                // successAndPerform();
+              },
+            ),
+          )
+          .catchError(
+            (error) => print("Failed to add user: $error"),
+          );
+    }*/
   }
 
   @override

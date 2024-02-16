@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_typing_uninitialized_variables, avoid_print
 
 import 'package:crazy_anamak/classes/public_chat_room/public_chat/new_public_chat_room.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,7 +17,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../headers/custom/app_bar.dart';
 import '../headers/utils/utils.dart';
-import '../public_chat_room/public_chat_room.dart';
+// import '../public_chat_room/public_chat_room.dart';
+
+import 'package:random_name_generator/random_name_generator.dart';
 
 class OnlineChatEntryScreen extends StatefulWidget {
   const OnlineChatEntryScreen({super.key});
@@ -26,6 +29,10 @@ class OnlineChatEntryScreen extends StatefulWidget {
 }
 
 class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
+  //
+  var strSelectGender = '1';
+  //
+  var strDynamicIcon = '1';
   //
   var strButtonloader = '0';
   var strSetLoader = '1';
@@ -45,10 +52,19 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
   //
   var chat_user_id;
   //
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+  var randomNames;
+  //
+  @override
+  void initState() {
+    randomNames = RandomNames(Zone.india);
+    print("India:     ${randomNames.fullName()}");
+    contSetName.text = (strSelectGender == '1')
+        ? '${randomNames.manFullName()}'
+        : (strSelectGender == '2')
+            ? '${randomNames.womanFullName()}'
+            : '${randomNames.name()}';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,26 +79,47 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
             )
           : Column(
               children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(
-                    top: 20.0,
-                    left: 20.0,
-                  ),
-                  color: Colors.transparent,
-                  height: 60,
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
                   child: Form(
                     key: _formKey,
                     child: TextFormField(
                       controller: contSetName,
                       decoration: InputDecoration(
+                        /*labelText: (strSelectGender == '1')
+                            ? '${randomNames.manFullName()}'
+                            : (strSelectGender == '2')
+                                ? '${randomNames.womanFullName()}'
+                                : '${randomNames.name()}',*/
                         hintText: 'chat name...',
+                        // suffixText: 'ok',
                         hintStyle: GoogleFonts.poppins(
                           fontSize: 12.0,
                           color: Colors.grey,
                         ),
-                        prefixIcon: Icon(
-                          Icons.person,
-                          color: app_color,
+                        prefixIcon: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (strSelectGender == '1') ...[
+                              //
+                              const Icon(
+                                Icons.person,
+                                color: Colors.blue,
+                              ),
+                            ] else if (strSelectGender == '2') ...[
+                              //
+                              const Icon(
+                                Icons.person,
+                                color: Colors.pink,
+                              ),
+                            ] else ...[
+                              //
+                              const Icon(
+                                Icons.abc,
+                                color: Colors.black,
+                              ),
+                            ]
+                          ],
                         ),
                       ),
                       validator: (value) {
@@ -95,7 +132,430 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
                   ),
                 ),
                 //
-                Column(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      if (strSelectGender == '1') ...[
+                        //
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              //
+
+                              setState(() {
+                                strSelectGender = '1';
+                              });
+                              contSetName.text = (strSelectGender == '1')
+                                  ? '${randomNames.manFullName()}'
+                                  : (strSelectGender == '2')
+                                      ? '${randomNames.womanFullName()}'
+                                      : '${randomNames.name()}';
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 12.0,
+                              ),
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.4,
+                                ),
+                                color: const Color.fromARGB(200, 0, 0, 0),
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //       color: Colors.blueAccent,
+                                //       spreadRadius: 3),
+                                // ],
+                              ),
+                              /**/
+                              child: Center(
+                                child: textWithRegularStyle(
+                                  'Male',
+                                  12.0,
+                                  Colors.white,
+                                  'left',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        //
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              //
+                              HapticFeedback.lightImpact();
+                              setState(() {
+                                strSelectGender = '2';
+                              });
+                              contSetName.text = (strSelectGender == '1')
+                                  ? '${randomNames.manFullName()}'
+                                  : (strSelectGender == '2')
+                                      ? '${randomNames.womanFullName()}'
+                                      : '${randomNames.name()}';
+                            },
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.8,
+                                ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //       color: Colors.blueAccent, spreadRadius: 3),
+                                // ],
+                              ),
+                              child: Center(
+                                child: textWithRegularStyle(
+                                  'Female',
+                                  12.0,
+                                  Colors.black,
+                                  'left',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              //
+                              HapticFeedback.lightImpact();
+                              setState(() {
+                                strSelectGender = '3';
+                              });
+                              contSetName.text = (strSelectGender == '1')
+                                  ? '${randomNames.manFullName()}'
+                                  : (strSelectGender == '2')
+                                      ? '${randomNames.womanFullName()}'
+                                      : '${randomNames.name()}';
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                right: 16.0,
+                              ),
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.8,
+                                ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //       color: Colors.blueAccent, spreadRadius: 3),
+                                // ],
+                              ),
+                              child: Center(
+                                child: textWithRegularStyle(
+                                  'Others',
+                                  12.0,
+                                  Colors.black,
+                                  'left',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ] else if (strSelectGender == '2') ...[
+                        //
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              //
+                              HapticFeedback.lightImpact();
+                              setState(() {
+                                strSelectGender = '1';
+                              });
+                              contSetName.text = (strSelectGender == '1')
+                                  ? '${randomNames.manFullName()}'
+                                  : (strSelectGender == '2')
+                                      ? '${randomNames.womanFullName()}'
+                                      : '${randomNames.name()}';
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 12.0,
+                              ),
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.8,
+                                ),
+
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //       color: Colors.blueAccent, spreadRadius: 3),
+                                // ],
+                              ),
+                              /**/
+                              child: Center(
+                                child: textWithRegularStyle(
+                                  'Male',
+                                  12.0,
+                                  Colors.black,
+                                  'left',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        //
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              //
+                              setState(() {
+                                strSelectGender = '2';
+                              });
+                              contSetName.text = (strSelectGender == '1')
+                                  ? '${randomNames.manFullName()}'
+                                  : (strSelectGender == '2')
+                                      ? '${randomNames.womanFullName()}'
+                                      : '${randomNames.name()}';
+                            },
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.8,
+                                ),
+                                color: const Color.fromARGB(200, 0, 0, 0),
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //       color: Colors.blueAccent,
+                                //       spreadRadius: 3),
+                                // ],
+                              ),
+                              child: Center(
+                                child: textWithRegularStyle(
+                                  'Female',
+                                  12.0,
+                                  Colors.white,
+                                  'left',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              //
+                              HapticFeedback.lightImpact();
+                              setState(() {
+                                strSelectGender = '3';
+                              });
+                              contSetName.text = (strSelectGender == '1')
+                                  ? '${randomNames.manFullName()}'
+                                  : (strSelectGender == '2')
+                                      ? '${randomNames.womanFullName()}'
+                                      : '${randomNames.name()}';
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                right: 16.0,
+                              ),
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.8,
+                                ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //       color: Colors.blueAccent, spreadRadius: 3),
+                                // ],
+                              ),
+                              child: Center(
+                                child: textWithRegularStyle(
+                                  'Others',
+                                  12.0,
+                                  Colors.black,
+                                  'left',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ] else ...[
+                        //
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              //
+                              HapticFeedback.lightImpact();
+                              setState(() {
+                                strSelectGender = '1';
+                              });
+                              contSetName.text = (strSelectGender == '1')
+                                  ? '${randomNames.manFullName()}'
+                                  : (strSelectGender == '2')
+                                      ? '${randomNames.womanFullName()}'
+                                      : '${randomNames.name()}';
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 12.0,
+                              ),
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.8,
+                                ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //       color: Colors.blueAccent, spreadRadius: 3),
+                                // ],
+                              ),
+                              /**/
+                              child: Center(
+                                child: textWithRegularStyle(
+                                  'Male',
+                                  12.0,
+                                  Colors.black,
+                                  'left',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        //
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              //
+                              HapticFeedback.lightImpact();
+                              setState(() {
+                                strSelectGender = '2';
+                              });
+                              contSetName.text = (strSelectGender == '1')
+                                  ? '${randomNames.manFullName()}'
+                                  : (strSelectGender == '2')
+                                      ? '${randomNames.womanFullName()}'
+                                      : '${randomNames.name()}';
+                            },
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.8,
+                                ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //       color: Colors.blueAccent,
+                                //       spreadRadius: 3),
+                                // ],
+                              ),
+                              child: Center(
+                                child: textWithRegularStyle(
+                                  'Female',
+                                  12.0,
+                                  Colors.black,
+                                  'left',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              //
+                              // HapticFeedback.lightImpact();
+                              setState(() {
+                                strSelectGender = '3';
+                              });
+                              contSetName.text = (strSelectGender == '1')
+                                  ? '${randomNames.manFullName()}'
+                                  : (strSelectGender == '2')
+                                      ? '${randomNames.womanFullName()}'
+                                      : '${randomNames.name()}';
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                right: 16.0,
+                              ),
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 0.8,
+                                ),
+                                color: const Color.fromARGB(200, 0, 0, 0),
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ),
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //       color: Colors.blueAccent,
+                                //       spreadRadius: 3),
+                                // ],
+                              ),
+                              child: Center(
+                                child: textWithRegularStyle(
+                                  'Others',
+                                  12.0,
+                                  Colors.white,
+                                  'left',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                /*Column(
                   children: [
                     RadioListTile(
                       title: Align(
@@ -152,7 +612,7 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
                       },
                     ),
                   ],
-                ),
+                ),*/
                 //
 
                 InkWell(
@@ -181,26 +641,27 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
                     width: MediaQuery.of(context).size.width,
 
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(
-                        116,
-                        190,
-                        228,
-                        1,
-                      ),
+                      color: const Color.fromARGB(200, 0, 0, 0),
+                      // color: const Color.fromRGBO(
+                      //   116,
+                      //   190,
+                      //   228,
+                      //   1,
+                      // ),
                       borderRadius: BorderRadius.circular(
                         12,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: app_color.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: const Offset(
-                            0,
-                            3,
-                          ), // changes position of shadow
-                        ),
-                      ],
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: app_color.withOpacity(0.5),
+                      //     spreadRadius: 5,
+                      //     blurRadius: 7,
+                      //     offset: const Offset(
+                      //       0,
+                      //       3,
+                      //     ), // changes position of shadow
+                      //   ),
+                      // ],
                     ),
                     // 115 189 227
                     child: Center(
