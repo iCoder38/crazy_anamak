@@ -614,6 +614,15 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
                   ],
                 ),*/
                 //
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: textWithRegularStyle(
+                    'Click gender to generate more names',
+                    12.0,
+                    Colors.grey,
+                    'center',
+                  ),
+                ),
 
                 InkWell(
                   onTap: () {
@@ -895,6 +904,7 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
                   builder: (context) => NewPublicChatRoomScreen(
                     strSenderName: contSetName.text.toString(),
                     strSenderChatId: chatUserId.toString(),
+                    strGetGender: strSelectGender.toString(),
                   ),
                 ),
               );
@@ -949,6 +959,7 @@ class _OnlineChatEntryScreenState extends State<OnlineChatEntryScreen> {
             builder: (context) => NewPublicChatRoomScreen(
               strSenderName: contSetName.text.toString(),
               strSenderChatId: chatUserId.toString(),
+              strGetGender: strSelectGender.toString(),
             ),
           ),
         );

@@ -8,10 +8,14 @@ import '../../headers/utils/utils.dart';
 
 class NewPublicChatRoomScreen extends StatefulWidget {
   const NewPublicChatRoomScreen(
-      {super.key, required this.strSenderName, required this.strSenderChatId});
+      {super.key,
+      required this.strSenderName,
+      required this.strSenderChatId,
+      required this.strGetGender});
 
   final String strSenderName;
   final String strSenderChatId;
+  final String strGetGender;
 
   @override
   State<NewPublicChatRoomScreen> createState() =>
@@ -64,8 +68,8 @@ class _NewPublicChatRoomScreenState extends State<NewPublicChatRoomScreen> {
                 //
                 return (communityData['sender_id'].toString() ==
                         FirebaseAuth.instance.currentUser!.uid.toString())
-                    ? senderUIKIT(communityData)
-                    : receiverUIKIT(communityData);
+                    ? senderUIKIT(communityData) //receiverUIKIT(communityData)
+                    : senderUIKIT(communityData);
               },
             ),
           ),
@@ -253,16 +257,35 @@ class _NewPublicChatRoomScreenState extends State<NewPublicChatRoomScreen> {
               padding: const EdgeInsets.all(6.0),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.person,
-                    color: Colors.pink,
-                    size: 18.0,
-                  ),
+                  if (communityData['sender_gender'] == '1') ...[
+                    //
+                    const Icon(
+                      Icons.person,
+                      color: Colors.blue,
+                      size: 18.0,
+                    ),
+                  ] else if (communityData['sender_gender'] == '2') ...[
+                    //
+                    const Icon(
+                      Icons.person,
+                      color: Colors.pink,
+                      size: 18.0,
+                    ),
+                  ] else ...[
+                    //
+                    const Icon(
+                      Icons.abc,
+                      color: Colors.black,
+                      size: 18.0,
+                    ),
+                  ],
                   const SizedBox(
                     width: 6.0,
                   ),
                   textWithRegularStyle(
-                    'dishu',
+                    //
+                    //
+                    communityData['sender_name'],
                     12.0,
                     Colors.black,
                     'left',
@@ -358,7 +381,7 @@ class _NewPublicChatRoomScreenState extends State<NewPublicChatRoomScreen> {
           {
             'sender_chat_user_id': widget.strSenderChatId.toString(),
             'sender_name': widget.strSenderName.toString(),
-            'sender_gender': 'gender',
+            'sender_gender': widget.strGetGender,
             'sender_id': FirebaseAuth.instance.currentUser!.uid,
             'message': strLastMessageEntered.toString(),
             'time_stamp': DateTime.now().millisecondsSinceEpoch,
