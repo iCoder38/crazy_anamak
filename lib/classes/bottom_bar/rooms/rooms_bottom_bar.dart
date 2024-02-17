@@ -48,9 +48,9 @@ class _BottomBarRoomsScreenState extends State<BottomBarRoomsScreen> {
               strRoomLocked: 'no',
             ),
             // PAID ROOM
-            const AllRoomsScreen(
+            /*const AllRoomsScreen(
               strRoomLocked: 'yes',
-            ),
+            ),*/
             //
 
             //
@@ -89,14 +89,14 @@ class _BottomBarRoomsScreenState extends State<BottomBarRoomsScreen> {
               label: 'Free',
             ),
             //
-            BottomNavigationBarItem(
+            /*BottomNavigationBarItem(
               // backgroundColor: community_page_navigation_color(),
               icon: Icon(
                 Icons.money,
                 color: Colors.black,
               ),
               label: 'Locked',
-            ),
+            ),*/
             //
             BottomNavigationBarItem(
               // backgroundColor: community_page_navigation_color(),

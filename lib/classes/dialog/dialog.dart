@@ -105,7 +105,11 @@ class _DialogScreenState extends State<DialogScreen> {
                     'left',
                   ),
                   trailing: textWithRegularStyle(
-                    'str',
+                    funcConvertTimeStampToDateAndTimeForChat(
+                      int.parse(
+                        communityData['time_stamp'].toString(),
+                      ),
+                    ),
                     12.0,
                     Colors.black,
                     'left',
